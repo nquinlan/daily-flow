@@ -1,0 +1,63 @@
+@import url(http://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700italic);
+
+.timenum {
+  font-size: 1000%;
+  margin-top: 0px;
+  font-weight: bold;
+  /*text-align: right;*/
+  color: white;
+}
+
+.temper {
+  font-size: 800%;
+  margin-top: 0px;
+  font-weight: bold;
+  color: white;
+}
+
+.citydate {
+  font-size: 300%;
+  margin-top: 0px;
+  font-weight: bold;
+  color: white;
+}
+
+.info {
+  font-size: 500%;
+  margin-top: 0x;
+  font-weight: bold;
+  color: white;
+}
+
+.legible {
+  font-size: 150%;
+  margin-top: 10px;
+  color: white;
+}
+
+#container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+}
+
+#top_div {
+  position: absolute;
+  top: 0;
+  right: 50%;
+  left: 0;
+  bottom: 0;
+  text-align: center;
+}
+
+#bottom_div {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 50%;
+  bottom: 0;
+  background-color: #82282d;
+  text-align: center;
+}

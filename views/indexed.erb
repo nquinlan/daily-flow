@@ -1,0 +1,149 @@
+<html>
+<title>Dailyflow</title>
+<head>
+	<link rel="stylesheet" href="/stylesheets/stylesheet.css" type="text/css" />
+	<script src="/jquery-2.0.3.min.js"></script>
+	<script>
+
+			// Code from Dsolver http://www.dsolver.ca/time
+			// Needs to be updated to cycle minutes more smoothly
+
+			function Clock(mode){
+				this.mode = mode;
+				this.clockElem = $("#thetime");
+				this.display = "time";
+				this.darkColor = "rgba(50, 50, 50, 0.7)";
+				this.lightColor = "rgba(255, 255, 255, 0.8)";
+				
+				this.interactions();
+				this.update();
+				
+				window.setInterval(function(){clock.update()}, 1000);
+				
+			};
+			
+			Clock.prototype.update = function(){
+				
+				var hexcol = this.convertTime();
+				
+				if(this.display === "time"){
+					var dispHour = this.hour;
+					if(this.mode === "12h" && this.hour > 12) {
+						dispHour = this.hour - 12;
+					}
+					this.clockElem.html((dispHour < 10 ? "0"+dispHour : dispHour)
+						+":"+(this.minute < 10 ? "0"+this.minute : this.minute)
+						+":"+(this.second < 10 ? "0"+this.second : this.second)
+						+" "+(this.mode === "12h" ? (this.hour < 12 ? "AM" : "PM") : ""));
+				} else if(this.display === "hex") {
+					this.clockElem.html("#"+hexcol);
+				}
+				
+				this.clockElem.css({
+					"text-shadow":"1px 4px 6px #"+hexcol+", 0 0 0 #000, 1px 4px 6px #"+hexcol
+				});
+				
+				document.body.style.background = "#"+hexcol;
+				var r = parseInt(hexcol.substr(0, 2), 16);
+				var g = parseInt(hexcol.substr(2, 2), 16);
+				var b = parseInt(hexcol.substr(4, 2), 16);
+				
+				if(r > 210 && g > 210 && b > 210){
+					$("#thetime").css("color", this.darkColor);
+				} else {
+					$("#thetime").css("color", this.lightColor);
+				}
+			}
+			
+			Clock.prototype.convertTime = function(time){
+				
+				time = time ? time : new Date();
+				this.hour = time.getHours();
+				this.minute = time.getMinutes();
+				this.second = time.getSeconds();
+				var hexcol = (Math.round(time.getTime() / 1000) % 16581375).toString(16);
+				
+				while(hexcol.length < 6){
+					hexcol = "0"+hexcol;
+				}
+				return hexcol;
+			}
+			
+			Clock.prototype.interactions = function(){
+				$(document).click(function(){
+					clock.toggle();
+					clock.update();
+				});
+				
+				$("#switchTime").click(function(event){
+					event.stopPropagation();
+					if(clock.mode === "24h"){
+						clock.mode = "12h";
+						$("#switchTime").html("Switch to 24 hour clock");
+					} else if(clock.mode === "12h"){
+						clock.mode = "24h";
+						$("#switchTime").html("Switch to 12 hour clock");
+					}
+					clock.update();
+				});
+			}
+			
+			Clock.prototype.toggle = function(){
+				this.display = (this.display === "hex" ? "time" : "hex");
+			}
+			
+			$(document).ready(function(){
+				if(window.location.hash && window.location.hash=="24h"){
+					mode = "24h";
+				} else {
+					mode = "12h";
+				}
+				clock = new Clock(mode);
+			
+			});
+			
+			
+		</script>
+</head>
+
+<body>
+ <!--  <% weatherapicall = {"coord"=>{"lon"=>-104.98, "lat"=>39.74}, "sys"=>{"message"=>0.0139, "country"=>"US", "sunrise"=>1389795527, "sunset"=>1389830426}, "weather"=>[{"id"=>800, "main"=>"Clear", "description"=>"Sky is Clear", "icon"=>"01d"}], "base"=>"cmc stations", "main"=>{"temp"=>277.75, "humidity"=>24, "pressure"=>1017, "temp_min"=>269.26, "temp_max"=>283.15}, "wind"=>{"speed"=>6.17, "gust"=>10.79, "deg"=>287}, "clouds"=>{"all"=>0}, "dt"=>1389803070, "id"=>5419384, "name"=>"Denver", "cod"=>200} %>
+ -->
+
+  <% weatherapicall = HTTParty.get("http://api.openweathermap.org/data/2.5/weather?q=Denver,us&units=imperial") %>
+
+	<div class="container">
+
+	<div id="top_div">
+
+    	<div id="thetime" class="timenum" style="color:rgba(50, 50, 50, 0.5); font-size:100px;">
+		
+		</div>
+
+		<div class="citydate" >
+			<%= "#{weatherapicall["name"]}, #{"#{Date::MONTHNAMES[Date.today.month]} #{Time.now.day}"}" %>
+		</div>
+
+		<div class="temper">
+			<%=  "#{weatherapicall["main"]["temp"]}<sup>°F</sup>" %>
+		</div>
+
+		<div class="info">
+			<% a = Indexkey.new
+			index = a.gimme %>
+			<% weatherid = weatherapicall["weather"][0]["id"] %>
+			<%= index[weatherid.to_s].capitalize %>
+		</br>
+			<%= "#{weatherid = weatherapicall["main"]["humidity"]} rh%  " %>
+			<%= "#{weatherid = weatherapicall["wind"]["speed"]} m/s" %>
+		</div>
+
+	</div>
+
+	<div id="bottom_div">
+		<div class="legible">
+			<%= weatherapicall = HTTParty.get("http://api.openweathermap.org/data/2.5/weather?q=Denver,us&units=imperial") %></div>
+		</div>
+	</div>
+</body>
+</html>
