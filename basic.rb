@@ -7,8 +7,7 @@ require 'sinatra'
 # set sinatra's variables
 # set :app_file, __FI÷(__FILE__)
 set :views, "views"
-set :public, 'static'
-
+set :public_dir, 'static'
 
 get '/' do
   erb :indexed
