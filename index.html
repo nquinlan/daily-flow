@@ -2,6 +2,47 @@
 <head>
 	<title>Dailyflow</title>
 	<link rel="stylesheet" href="css/stylesheet.css" type="text/css" />
+</head>
+
+<body>
+ <!--  <% weatherapicall = {"coord"=>{"lon"=>-104.98, "lat"=>39.74}, "sys"=>{"message"=>0.0139, "country"=>"US", "sunrise"=>1389795527, "sunset"=>1389830426}, "weather"=>[{"id"=>800, "main"=>"Clear", "description"=>"Sky is Clear", "icon"=>"01d"}], "base"=>"cmc stations", "main"=>{"temp"=>277.75, "humidity"=>24, "pressure"=>1017, "temp_min"=>269.26, "temp_max"=>283.15}, "wind"=>{"speed"=>6.17, "gust"=>10.79, "deg"=>287}, "clouds"=>{"all"=>0}, "dt"=>1389803070, "id"=>5419384, "name"=>"Denver", "cod"=>200} %>
+ -->
+
+  <% weatherapicall = HTTParty.get("http://api.openweathermap.org/data/2.5/weather?q=Denver,us&units=imperial") %>
+
+	<div class="container">
+
+	<div id="top_div">
+
+    	<div id="thetime" class="timenum" style="color:rgba(50, 50, 50, 0.5); font-size:100px;">
+		
+		</div>
+
+		<div class="citydate" >
+			<%= "#{weatherapicall["name"]}, #{"#{Date::MONTHNAMES[Date.today.month]} #{Time.now.day}"}" %>
+		</div>
+
+		<div class="temper">
+			<%=  "#{weatherapicall["main"]["temp"]}<sup>°F</sup>" %>
+		</div>
+
+		<div class="info">
+			<% a = Indexkey.new
+			index = a.gimme %>
+			<% weatherid = weatherapicall["weather"][0]["id"] %>
+			<%= index[weatherid.to_s].capitalize %>
+		</br>
+			<%= "#{weatherid = weatherapicall["main"]["humidity"]} rh%  " %>
+			<%= "#{weatherid = weatherapicall["wind"]["speed"]} m/s" %>
+		</div>
+
+	</div>
+
+	<div id="bottom_div">
+		<div class="legible">
+			<%= weatherapicall = HTTParty.get("http://api.openweathermap.org/data/2.5/weather?q=Denver,us&units=imperial") %></div>
+		</div>
+	</div>
 	<script src="js/vendor/jquery-2.0.3.min.js"></script>
 	<script>
 
@@ -104,46 +145,5 @@
 			
 			
 		</script>
-</head>
-
-<body>
- <!--  <% weatherapicall = {"coord"=>{"lon"=>-104.98, "lat"=>39.74}, "sys"=>{"message"=>0.0139, "country"=>"US", "sunrise"=>1389795527, "sunset"=>1389830426}, "weather"=>[{"id"=>800, "main"=>"Clear", "description"=>"Sky is Clear", "icon"=>"01d"}], "base"=>"cmc stations", "main"=>{"temp"=>277.75, "humidity"=>24, "pressure"=>1017, "temp_min"=>269.26, "temp_max"=>283.15}, "wind"=>{"speed"=>6.17, "gust"=>10.79, "deg"=>287}, "clouds"=>{"all"=>0}, "dt"=>1389803070, "id"=>5419384, "name"=>"Denver", "cod"=>200} %>
- -->
-
-  <% weatherapicall = HTTParty.get("http://api.openweathermap.org/data/2.5/weather?q=Denver,us&units=imperial") %>
-
-	<div class="container">
-
-	<div id="top_div">
-
-    	<div id="thetime" class="timenum" style="color:rgba(50, 50, 50, 0.5); font-size:100px;">
-		
-		</div>
-
-		<div class="citydate" >
-			<%= "#{weatherapicall["name"]}, #{"#{Date::MONTHNAMES[Date.today.month]} #{Time.now.day}"}" %>
-		</div>
-
-		<div class="temper">
-			<%=  "#{weatherapicall["main"]["temp"]}<sup>°F</sup>" %>
-		</div>
-
-		<div class="info">
-			<% a = Indexkey.new
-			index = a.gimme %>
-			<% weatherid = weatherapicall["weather"][0]["id"] %>
-			<%= index[weatherid.to_s].capitalize %>
-		</br>
-			<%= "#{weatherid = weatherapicall["main"]["humidity"]} rh%  " %>
-			<%= "#{weatherid = weatherapicall["wind"]["speed"]} m/s" %>
-		</div>
-
-	</div>
-
-	<div id="bottom_div">
-		<div class="legible">
-			<%= weatherapicall = HTTParty.get("http://api.openweathermap.org/data/2.5/weather?q=Denver,us&units=imperial") %></div>
-		</div>
-	</div>
 </body>
 </html>
